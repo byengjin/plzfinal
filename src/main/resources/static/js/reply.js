@@ -1,19 +1,28 @@
-// 댓글 목록 불러오기
-async function getReplies(postId) {
+async function getList(replyId, postId, userId, content, regDate) {
+
+    const result = await axios.get(`/reply/list/${replyId}`, {params: {page,size}})
+    if(goLast){
+        const total = result.data.total
+        const lastPage =parseInt(Math.ceil(total/size))
+    }
+    // console.log(result.data)
+    return result.data;
+}
+
+async function getList(replyId) {
     try {
-        const result = await axios.get(`/reply/${postId}`);
-        console.log(result.data); // 데이터를 콘솔에 출력하여 확인
-        return result.data;
+        const result = await axios.get(`posting/read/${replyId}`);
+        console.log(result.data);
+        return result;
     } catch (error) {
-        console.error('Error fetching replies:', error);
+        console.error('Error fetching list:', error);
         throw error;
     }
 }
 
-// 새로운 댓글 추가
 async function addReply(replyObj, postId) {
     try {
-        const response = await axios.post(`/reply/${postId}`, replyObj);
+        const response = await axios.post(`/replies/${postId}`, replyObj);
         return response.data;
     } catch (error) {
         console.error('Error adding reply:', error);
@@ -21,10 +30,9 @@ async function addReply(replyObj, postId) {
     }
 }
 
-// 대댓글 추가
 async function addReReply(replyObj, parentId) {
     try {
-        const response = await axios.post(`/reply/${parentId}`, replyObj);
+        const response = await axios.post(`reply/${parentId}`, replyObj);
         return response.data;
     } catch (error) {
         console.error('Error adding re-reply:', error);
@@ -32,7 +40,6 @@ async function addReReply(replyObj, parentId) {
     }
 }
 
-// 특정 댓글 불러오기
 async function getReply(replyId) {
     try {
         const response = await axios.get(`/reply/${replyId}`);
@@ -43,7 +50,6 @@ async function getReply(replyId) {
     }
 }
 
-// 댓글 수정
 async function modifyReply(replyId, replyObj) {
     try {
         const response = await axios.put(`/reply/${replyId}`, replyObj);
@@ -54,7 +60,6 @@ async function modifyReply(replyId, replyObj) {
     }
 }
 
-// 댓글 삭제
 async function removeReply(replyId) {
     try {
         const response = await axios.delete(`/reply/${replyId}`);
@@ -65,10 +70,9 @@ async function removeReply(replyId) {
     }
 }
 
-// 전체 댓글과 대댓글 목록 불러오기
 async function loadReplies(postId) {
     try {
-        const response = await axios.get(`/reply/${postId}`);
+        const response = await axios.get(`/replies/${postId}`);
         return response.data;
     } catch (error) {
         console.error('Error loading replies:', error);

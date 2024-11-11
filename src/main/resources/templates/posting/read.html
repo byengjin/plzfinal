@@ -40,17 +40,23 @@
         </div>
     </div>
 
-    <!--    댓글 영역-->
+    <!-- 댓글 영역 -->
     <div class="row mt-3">
         <div class="col-md-12">
-            <div class="my-4 ">
-                <button sec:authorize="isAuthenticated()" class="btn btn-info  addCommentBtn">댓글입력</button>
-            </div>
             <ul class="list-group replyList">
                 댓글 리스트 영역
             </ul>
         </div>
     </div>
+
+    <!-- 텍스트 박스 -->
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <h5>텍스트 입력 박스</h5>
+            <textarea class="form-control" rows="5" placeholder="여기에 텍스트를 입력하세요..."></textarea>
+        </div>
+    </div>
+
     <div class="row mt-3">
         <div class="col">
             <ul class="pagination replyPaging">
@@ -68,25 +74,24 @@
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <span class="input-group-text">댓글 내용</span>
-                        <input type="text" class="form-control replyText" >
+                        <input type="text" class="form-control replyText">
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">대댓글</span>
-                        <input type="text" class="form-control replyer" >
+                        <input type="text" class="form-control replyer">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary registerBtn">작성하기</button>
-                    <button type="button" class="btn btn-outline-dark closeRegisterBtn" >접기</button>
+                    <button type="button" class="btn btn-outline-dark closeRegisterBtn">접기</button>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/reply.js"></script>
-
-</div>
-
+</body>
 
 
 <!-- 신고하기 모달 -->
@@ -164,9 +169,7 @@
                 replyElement.style.border = "1px solid #ccc";
                 replyElement.style.padding = "10px";
 
-                replyElement.innerHTML = `
-            <p>${reply.content}</p>
-            <small>${new Date(reply.createdAt).toLocaleString()}</small>
+                replyElement.innerHTML = `<p>${reply.content}</p> <small>${new Date(reply.createdAt).toLocaleString()}</small>
             <button class="btn btn-warning btn-sm">신고</button>
             <button class="btn btn-info btn-sm">수정</button>
             <form action="/reply/delete/${reply.replyId}" method="post" style="display:inline;">
@@ -183,6 +186,7 @@
     const postID=[[${dto.postID}]]
     const replyList = document.querySelector('.replyList')
     const replyPaging = document.querySelector('.replyPaging')
+
     console.log("postId="+postID)
 
             function printList(dtoList) {
@@ -190,11 +194,12 @@
                 if(dtoList && dtoList.length > 0) {
                     for (const dto of dtoList) {
                         str += `<li class="list-group-item d-flex replyItem">`
-                        str += `<span class="col-2">${dto.replyId}</span>`
-                        str += `<span class="col-6" data-rno="${dto.rno}">${dto.replyText}</span>`
+                        str += `<span class="col-2">${dto.postId}</span>`
+                        str += `<span class="col-6" data-rno="${dto.replyId}">${dto.content}</span>`
                         str += `<span class="col-2">${dto.userId}</span>`
                         str += `<span class="col-2">${dto.regDate} </span>`
                         str += `</li>`
+
                         //<span class="col-1">${dto.replyId}</span>
                         //<span class="col-6" data-rno="${dto.replyid}">${dto.content}</span>
                         //<span class="col-2">${dto.userId}</span>
@@ -238,6 +243,9 @@
                     console.error(e)
                 })
             }
+
+
+
             // const replyList = document.querySelector('.replyList')
             // let str = ''
             // function printList(dtoList){
@@ -246,13 +254,13 @@
             //
             // for (const dto of dtoList){
 
+
+
             if(dto.children && dto.children.length > 0){
             str+=' <ul>'
             printList(dto.children())
             str+='</ul>'
-        }
 
-        }
             }
             ReplyList.innerHTML = str;
 
@@ -320,6 +328,8 @@
             parentId=e.target.getAttribute("data-cno")
             registerModal.show()
         },false)
+
+    printReplies(1,10,true)
         </script>
 
 </body>
