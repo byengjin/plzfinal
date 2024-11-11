@@ -92,5 +92,5 @@ public class Post extends BaseEntity {
     }
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("post")
-    private List<Reply> replies;// 댓글달려면 필요
+    private List<Reply> replies;// 댓글쪽에서 추가 햇습니다. 댓글달려면 필요
 }

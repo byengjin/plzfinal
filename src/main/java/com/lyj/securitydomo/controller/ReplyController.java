@@ -14,10 +14,10 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/list/{postId}")
+    @GetMapping("/read/{postId}")
     public String listReplies(@PathVariable Long postId, Model model) {
-        model.addAttribute("reply", replyService.getRepliesByPostId(postId));
-        return "reply/list";
+        model.addAttribute("replies", replyService.getRepliesByPostId(postId));
+        return "reply/read";
     }
 
     @PostMapping("/create")
@@ -36,7 +36,7 @@ public class ReplyController {
         return "redirect:/read/" + postId;
     }
 
-    @PostMapping("/remove/{replyId}")
+    @DeleteMapping("/remove/{replyId}")
     public String removeReply(@PathVariable Long replyId, @RequestParam Long postId) {
         replyService.removeReply(replyId);
         return "redirect:/read/" + postId;
