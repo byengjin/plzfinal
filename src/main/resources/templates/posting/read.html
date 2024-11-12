@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
+
 <div layout:fragment="content" class="container mt-5">
     <!-- 썸네일 이미지와 상단 버튼 영역 -->
     <div class="text-center">
@@ -40,23 +40,18 @@
         </div>
     </div>
 
-    <!-- 댓글 영역 -->
+    <!--    댓글 영역-->
     <div class="row mt-3">
         <div class="col-md-12">
+            <div class="my-4 ">
+                <button class="btn btn-info addReplyBtn">댓글추가</button>
+                <!--                sec:authorize="isAuthenticated()" 시큐리티 쓸때 버튼 뒤에 붙히면 됨-->
+            </div>
             <ul class="list-group replyList">
                 댓글 리스트 영역
             </ul>
         </div>
     </div>
-
-    <!-- 텍스트 박스 -->
-    <div class="row mt-3">
-        <div class="col-md-12">
-            <h5>텍스트 입력 박스</h5>
-            <textarea class="form-control" rows="5" placeholder="여기에 텍스트를 입력하세요..."></textarea>
-        </div>
-    </div>
-
     <div class="row mt-3">
         <div class="col">
             <ul class="pagination replyPaging">
@@ -68,269 +63,206 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">작성자</h5>
+                    <h5 class="modal-title">댓글 등록</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <span class="input-group-text">댓글 내용</span>
-                        <input type="text" class="form-control replyText">
+                        <span class="input-group-text">Reply Text</span>
+                        <input type="text" class="form-control replyText" >
                     </div>
                     <div class="input-group mb-3">
-                        <span class="input-group-text">대댓글</span>
-                        <input type="text" class="form-control replyer">
+                        <span class="input-group-text">Replyer</span>
+                        <input type="text" class="form-control replyer" >
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary registerBtn">작성하기</button>
-                    <button type="button" class="btn btn-outline-dark closeRegisterBtn">접기</button>
+                    <button type="button" class="btn btn-primary registerBtn">Register</button>
+                    <button type="button" class="btn btn-outline-dark closeRegisterBtn" >Close</button>
                 </div>
             </div>
         </div>
     </div>
 
+<!--    -->
+
+
+    <!--    댓글영역끝-->
+
+
+    <!-- 신고하기 모달 -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">신고하기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label for="category" class="form-label">신고 유형:</label>
+                            <select class="form-select" id="category" required>
+                                <option value="">선택하세요</option>
+                                <option value="ABUSE">욕설</option>
+                                <option value="SPAM">스팸</option>
+                                <option value="ADVERTISING">광고</option>
+                                <option value="PROMOTION">홍보</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">신고 사유:</label>
+                            <textarea class="form-control" id="reason" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="submitReport">신고하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/reply.js"></script>
-</body>
 
+</div>
 
-<!-- 신고하기 모달 -->
-        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true" data-bs-backdrop="static">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reportModalLabel">신고하기</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="reportForm">
-                            <div class="mb-3">
-                                <label for="category" class="form-label">신고 유형:</label>
-                                <select class="form-select" id="category" required>
-                                    <option value="">선택하세요</option>
-                                    <option value="ABUSE">욕설</option>
-                                    <option value="SPAM">스팸</option>
-                                    <option value="ADVERTISING">광고</option>
-                                    <option value="PROMOTION">홍보</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="reason" class="form-label">신고 사유:</label>
-                                <textarea class="form-control" id="reason" rows="3" required></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-primary" id="submitReport">신고하기</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--<script layout:fragment="script" th:inline="javascript">-->
+<!--    // /*<![CDATA[*/-->
+<!--    document.getElementById('reportModal').addEventListener('show.bs.modal', function (event) {-->
+<!--        const postId = button.closest('.text-center').getAttribute('data-post-id');-->
 
-        <script layout:fragment="script" th:inline="javascript">
-            // /*<![CDATA[*/
-            document.getElementById('reportModal').addEventListener('show.bs.modal', function (event) {
-                const postId = button.closest('.text-center').getAttribute('data-post-id');
+<!--        document.getElementById('submitReport').onclick = function () {-->
+<!--            const category = document.getElementById('category').value;-->
+<!--            const reason = document.getElementById('reason').value;-->
 
-                document.getElementById('submitReport').onclick = function () {
-                    const category = document.getElementById('category').value;
-                    const reason = document.getElementById('reason').value;
+<!--            fetch('/report/create', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/json',-->
+<!--                },-->
+<!--                body: JSON.stringify({postId: postId, category: category, reason: reason}),-->
+<!--            })-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) throw new Error('Network response was not ok');-->
+<!--                    return response.text();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    alert(data);-->
+<!--                    bootstrap.Modal.getInstance(document.getElementById('reportModal')).hide();-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error:', error);-->
+<!--                    alert('신고에 실패했습니다. 다시 시도해 주세요.');-->
+<!--                });-->
+<!--        };-->
+<!--    });-->
+<!--    // /*]]>*/-->
 
-                    fetch('/report/create', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({postId: postId, category: category, reason: reason}),
-                    })
-                        .then(response => {
-                            if (!response.ok) throw new Error('Network response was not ok');
-                            return response.text();
-                        })
-                        .then(data => {
-                            alert(data);
-                            bootstrap.Modal.getInstance(document.getElementById('reportModal')).hide();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('신고에 실패했습니다. 다시 시도해 주세요.');
-                        });
-                };
-            });
-            // /*]]>*/
-
-            function addReply(reply) {
-                const replyList = document.querySelector(".reply-list");
-
-                const replyElement = document.createElement("div");
-                replyElement.classList.add("reply", "mb-3");
-                replyElement.style.border = "1px solid #ccc";
-                replyElement.style.padding = "10px";
-
-                replyElement.innerHTML = `<p>${reply.content}</p> <small>${new Date(reply.createdAt).toLocaleString()}</small>
-            <button class="btn btn-warning btn-sm">신고</button>
-            <button class="btn btn-info btn-sm">수정</button>
-            <form action="/reply/delete/${reply.replyId}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-danger btn-sm">삭제</button>
-            </form>
-        `;
-                replyList.appendChild(replyElement);
-            }
-        </script>
-
+<!--</script>-->
 
 <script layout:fragment="script" th:inline="javascript">
 
-    const postID=[[${dto.postID}]]
-    const replyList = document.querySelector('.replyList')
-    const replyPaging = document.querySelector('.replyPaging')
+    const postId = [[${post.postId}]]
 
-    console.log("postId="+postID)
+    // document.addEventListener("DOMContentLoaded", function() {
 
-            function printList(dtoList) {
-                let str = '';
-                if(dtoList && dtoList.length > 0) {
-                    for (const dto of dtoList) {
-                        str += `<li class="list-group-item d-flex replyItem">`
-                        str += `<span class="col-2">${dto.postId}</span>`
-                        str += `<span class="col-6" data-rno="${dto.replyId}">${dto.content}</span>`
-                        str += `<span class="col-2">${dto.userId}</span>`
-                        str += `<span class="col-2">${dto.regDate} </span>`
-                        str += `</li>`
 
-                        //<span class="col-1">${dto.replyId}</span>
-                        //<span class="col-6" data-rno="${dto.replyid}">${dto.content}</span>
-                        //<span class="col-2">${dto.userId}</span>
-                        //<span class="col-2">${dto.postId}
-                        //<span class="col-2">${dto.regdate} </span>
-                        //
-                        //<button class="btn btn-outline-dark addReplyBtn" data-cno="${dto.replyId}">댓글작성</button>
+        const replyList = document.querySelector('.replyList')
+        let str = ''
 
+        function printList(dtoList) {
+            if (dtoList && dtoList.length > 0) {
+                for (const dto of dtoList) {
+                    str += `<li class="list-group-item d-flex postItem">
+            <span class="col-1">${dto.replyId}</span>
+            <span class="col-6" data-rno="${dto.replyId}">${dto.content}</span>
+            <span class="col-2">${dto.username}</span>
+            <span class="col-2">${dto.regDate}</span>
+            <button class="btn btn-outline-dark addCommentBtn" data-cno="${dto.postId}">댓글작성</button>
+            </li>`
+                    if (dto.children && dto.children.length > 0) {
+                        str += `<ul>`
+                        printList(dto.children)
+                        str += `</ul>`
                     }
                 }
-                alert(str)
-                replyList.innerHTML = str
-            }
-
-
-
-            // getList(postID)
-            function printPages(data) {
-                let pageStr = '';
-
-                if (data.prev) {
-                    pageStr +=`<li class=page-item"><a class="page-link" data-page="${data.start-1}">이전</a></li>`
-                }
-                for(let i = data.start; i <= data.end; i++) {
-                    pateStr +=`<li class="page-item ${i == data.page?"active":""} "><a class="=page-link" data-page="${i}"></a></li>`
-                }
-
-                if(data.next){
-                    pageStr +=`<li class="page-item"><a class="page-link" data-page="${data.end +1}">다음</a></li>`
-                }
-                replyPaging.innerHTML = pageStr
-            }
-            function printReplies(page, size, goLast) {
-                getList(postID, page, size, goLast).then(
-                    data => {
-                        // console.log(data)
-                        printList(data.dtoList)
-                        printPages(data)
-                    }
-                ).catch(e => {
-                    console.error(e)
-                })
-            }
-
-
-
-            // const replyList = document.querySelector('.replyList')
-            // let str = ''
-            // function printList(dtoList){
-            //
-            // if(dtoList && dtoList.length > 0){
-            //
-            // for (const dto of dtoList){
-
-
-
-            if(dto.children && dto.children.length > 0){
-            str+=' <ul>'
-            printList(dto.children())
-            str+='</ul>'
 
             }
-            ReplyList.innerHTML = str;
+            replyList.innerHTML = str
 
         }
-            function printReplys(){
-            str=''
-                replyList.clear
-                getList(postId).then(
-                    data => {
-                        printList(data)
-                    }
-                ).catch(e => {
-                    console.error(e)
-                })
-            }
-            printReplys();
+
+        function printReplies() {
+            // alert("aaaaaaaaaaaaaa")
+            str = ''
+            replyList.clear
+            getList(postId).then(
+                data => {
+                    console.log(data)
+
+                    printList(data)
+                }
+            ).catch(e => {
+                console.error(e)
+            })
+        }
+
+        printReplies();
 
         const registerModal = new bootstrap.Modal(document.querySelector(".registerModal"))
-        const registerBtn = document.querySelector(".reisterBtn")
+        const registerBtn = document.querySelector(".registerBtn")
         const replyText = document.querySelector(".replyText")
         const replyer = document.querySelector(".replyer")
         const closeRegisterBtn = document.querySelector(".closeRegisterBtn")
-        let parentId=''
-        document.querySelector(".addCommentBtn").addEventListener("click",function (e){
-            registerModal.show()
-        },false)
+        let parentId = ''
 
-        closeRegisterBtn.addEventListener("click", function (e){
+        document.querySelector(".addReplyBtn").addEventListener("click", function (e) {
+            alert("aaaaaaaaaaaaaaaa")
             registerModal.show()
-        },false)
+        }, false)
 
-        closeRegisterBtn.addEventListener("click",function (e){
+        closeRegisterBtn.addEventListener("click", function (e) {
             registerModal.hide()
-        },false)
+        }, false)
 
-        registerBtn.addEventListener("click",function (e){
-            let replyObj=null
-            if (parentId=='') {
+        registerBtn.addEventListener("click", function (e) {
+            let replyObj = null
+            if (parentId == '') {
                 replyObj = {
                     content: replyText.value,
-                    userId : replyer.value,
+                    username: replyer.value,
                 }
-            }else {
+            } else {
                 replyObj = {
                     content: replyText.value,
-                    userId: replyer.value,
-                    parentId : parentId
+                    username: replyer.value,
+                    parentId: parentId
+
                 }
             }
-
             addReply(replyObj, postId).then(result => {
                 alert(result)
                 registerModal.hide()
                 replyText.value = ''
                 replyer.value = ''
-                printReplys()
+                printReplies()
             }).catch(e => {
                 alert("Exception...")
             })
         }, false)
 
-        const addReplyBtn=document.querySelector(".replyList")
+        //const addReplyBtn = document.querySelector(".replyList")
 
-        addReplyBtn.addEventListener("click", function (e){
-            parentId=e.target.getAttribute("data-cno")
+        replyList.addEventListener("click", function (e) {
+            parentId = e.target.getAttribute("data-cno")
             registerModal.show()
-        },false)
+        }, false)
+    // })
+</script>
 
-    printReplies(1,10,true)
-        </script>
 
-</body>
+
 </html>

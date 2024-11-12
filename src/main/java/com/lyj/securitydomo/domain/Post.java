@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "imageSet")
+//@ToString(exclude = "imageSet")
 public class Post extends BaseEntity {
 
     @Id
@@ -52,8 +52,8 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
+
     @Builder.Default
     @BatchSize(size = 20)
     private Set<pPhoto> imageSet = Collections.synchronizedSet(new HashSet<>());

@@ -25,9 +25,8 @@ public class Reply {
 //    @Column(name = "postId", nullable = false, insertable = false, updatable = false)
 //    private Long postId;
 
-    @JoinColumn(name = "user_id", nullable = false)
-    @Column(name = "userId", nullable = false)
-    private Long userId;
+
+    private String username;
 
     @Column(nullable = false)
     private String content;
@@ -50,4 +49,7 @@ public class Reply {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Reply> children = new ArrayList<>();  // 대댓글 목록
 
+    public void changText(String text) {
+        this.content = text;
+    }
 }

@@ -1,47 +1,50 @@
 package com.lyj.securitydomo.controller;
 
+import com.lyj.securitydomo.domain.Reply;
 import com.lyj.securitydomo.dto.ReplyDTO;
 import com.lyj.securitydomo.service.ReplyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/reply")
-@RequiredArgsConstructor
+import java.security.Principal;
+import java.util.List;
+@Log4j2
+@RestController
+@RequestMapping("/replies")
+@RequiredArgsConstructor  // ReplyService를 생성자로 주입
 public class ReplyController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/read/{postId}")
-    public String listReplies(@PathVariable Long postId, Model model) {
-        model.addAttribute("replies", replyService.getRepliesByPostId(postId));
-        return "reply/read";
-    }
-
-    @PostMapping("/create")
-    public String createReply(@ModelAttribute ReplyDTO replyDTO, @RequestParam Long postId, @RequestParam(required = false) Long parentId) {
-        replyDTO.setPostId(postId);
-        replyDTO.setParentId(parentId);  // 대댓글의 부모 ID 설정
+    @PostMapping("/{postId}")
+    public ResponseEntity<ReplyDTO> createReply(@PathVariable Long postId, @RequestBody ReplyDTO replyDTO) {
         replyService.createReply(postId, replyDTO);
-
-        return "redirect:/posting/read/" + postId;  // 수정된 리다이렉트 경로
+        return ResponseEntity.ok(replyDTO);
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<Reply>> getReplies(
+            @PathVariable Long postId
+    ) {
+        log.info("getReplies"+postId);
+        List<Reply> replies = replyService.getReplies(postId);
+        log.info(replies.size());
+        return ResponseEntity.ok(replies);
+    }
 
-    @PostMapping("/modify/{replyId}")
-    public String modifyReply(@PathVariable Long replyId, @RequestParam String content, @RequestParam Long postId) {
+    @DeleteMapping("/{replyId}")
+    public ResponseEntity<Void> deleteReply(@PathVariable Long replyId) {
+        replyService.deleteReply(replyId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{replyId}")
+    public ResponseEntity<Void> modifyReply(@PathVariable Long replyId, @RequestBody String content) {
         replyService.modifyReply(replyId, content);
-        return "redirect:/read/" + postId;
+        return ResponseEntity.noContent().build();
     }
-
-    @DeleteMapping("/remove/{replyId}")
-    public String removeReply(@PathVariable Long replyId, @RequestParam Long postId) {
-        replyService.removeReply(replyId);
-        return "redirect:/read/" + postId;
-    }
-
-
 
 }

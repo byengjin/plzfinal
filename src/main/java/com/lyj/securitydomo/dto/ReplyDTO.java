@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class ReplyDTO {
     private Long replyId;
     private Long postId;
-    private Long userId;
+    private String username;
     private String content;
     private LocalDateTime regDate;
     private Long parentId;  // 부모 댓글 ID
