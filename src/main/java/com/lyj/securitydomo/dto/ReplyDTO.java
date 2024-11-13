@@ -2,6 +2,7 @@ package com.lyj.securitydomo.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ReplyDTO {
@@ -10,5 +11,6 @@ public class ReplyDTO {
     private String username;
     private String content;
     private LocalDateTime regDate;
-    private Long parentId;  // 부모 댓글 ID
+    private Long parentId;// 부모 댓글 ID
+
 }
